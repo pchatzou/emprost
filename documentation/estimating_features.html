@@ -1,0 +1,1257 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Navigating the dataset &mdash; emPROST 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="emPROST 0.1 documentation" href="index.html"/>
+        <link rel="next" title="Feature extraction routine" href="main1.html"/>
+        <link rel="prev" title="Manifesto" href="introduction.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> emPROST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Manifesto</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Navigating the dataset</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#making-the-dataset-map">Making the dataset map</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#estimating-features">Estimating features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#roi-based-approach">ROI based approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sliding-window">Sliding window</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-C1">C1 features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-C2">C2 features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-C3">C3 features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-C4">C4 features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-C5">C5 features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#classification">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#further-functionalities">Further functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main1.html">Feature extraction routine</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">emPROST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Navigating the dataset</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/estimating_features.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="navigating-the-dataset">
+<h1>Navigating the dataset<a class="headerlink" href="#navigating-the-dataset" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="making-the-dataset-map">
+<h2>Making the dataset map<a class="headerlink" href="#making-the-dataset-map" title="Permalink to this headline">¶</a></h2>
+<p>Module <em>separate_modalities</em> hosts all functions that generate the text files stored within the working directory and containing the directories of all interesting files (masks and images) for each patient. Finally, only patients about who all information is available are further processed. This selection is done internally, whereas text files contain directories for all available patients.</p>
+<span class="target" id="module-separate_modalities"></span><dl class="function">
+<dt id="separate_modalities.check_mask_integrity">
+<code class="descclassname">separate_modalities.</code><code class="descname">check_mask_integrity</code><span class="sig-paren">(</span><em>mask_dir</em>, <em>working_directory</em>, <em>patient_ID</em>, <em>mask_format_name</em>, <em>fix_masks=False</em><span class="sig-paren">)</span><a class="headerlink" href="#separate_modalities.check_mask_integrity" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;Masks are extracted with a in-house developped tool (SegmentationTool3) on <em>MeVisLab</em>
+some masks are hollow on some planes (only the contours are saved). Check for a mask if it is hollow or not in each plane.
+If it is so, fill holes with ones and save a corrected copy. It performs operations on a single mask file each time.
+This function is by default deactivated, as most masks are fixed manually. However, it is still possible to deploy.
+:param string mask_dir: mask directory
+:param string working_directory:
+:param string patient_ID:
+:param string mask_format_name: which kind of segmentation files to fix (peripheral zone or entire prostate).
+It has not been tested on ROI segmentations. Either way, it is not necessary for ROI segmentations. Thus, it can be
+<em>no_previous_mask_init.nii</em> for the entire prostate or <em>pz_mask.nii</em> for the peripheral zone.
+:param bool fix_masks: If set to True, perform a check, correct problematic masks and save corrected files.
+Default is False.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="separate_modalities.correct_masks">
+<code class="descclassname">separate_modalities.</code><code class="descname">correct_masks</code><span class="sig-paren">(</span><em>working_directory</em>, <em>mask_root_directory</em>, <em>mask_format_name</em><span class="sig-paren">)</span><a class="headerlink" href="#separate_modalities.correct_masks" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;Read directories file from <em>uncorrected_mask_paths.txt</em>, serial feed to check_mask_integrity and update file entry for mask.
+<em>corrected_masks.txt</em> map is thereafter created, which contains the directories of the masks actually used during feature
+extraction.
+:param string mask_dir: mask directory
+:param string working_directory:
+:param string mask_format_name: which kind of segmentation files to fix (peripheral zone or entire prostate).
+It has not been tested on ROI segmentations. Either way, it is not necessary for ROI segmentations. Thus, it can be
+<em>no_previous_mask_init.nii</em> for the entire prostate or <em>pz_mask.nii</em> for the peripheral zone.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="separate_modalities.file_list2">
+<code class="descclassname">separate_modalities.</code><code class="descname">file_list2</code><span class="sig-paren">(</span><em>working_directory</em>, <em>data_directory</em>, <em>reset=False</em><span class="sig-paren">)</span><a class="headerlink" href="#separate_modalities.file_list2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and save file <em>all_modalites.txt</em> in the working directory, which is the major map to a raw dataset.
+This file contains in lines the patient ID followed by lines that refer to the sequence description, pixel spacing
+and file full path (dicom directory). It is readable by humans. Then the next patient ID follows and so on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>data_directory</strong> (<em>string</em>) &#8211; raw dataset root directory</li>
+<li><strong>reset</strong> (<em>bool</em>) &#8211; If an <em>all_modalities.txt</em> file already exists, delete it and make a new map. Default is False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="separate_modalities.fix_dictionaries">
+<code class="descclassname">separate_modalities.</code><code class="descname">fix_dictionaries</code><span class="sig-paren">(</span><em>reference</em>, <em>dic2</em><span class="sig-paren">)</span><a class="headerlink" href="#separate_modalities.fix_dictionaries" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;check if dicitonaries have the same keys. If not, delete entries to make them.
+:param dictionary reference: true dictionary
+:param dictionary dic2: dictionary to edit</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="separate_modalities.get_dictionary">
+<code class="descclassname">separate_modalities.</code><code class="descname">get_dictionary</code><span class="sig-paren">(</span><em>modality_directories</em>, <em>reset=False</em><span class="sig-paren">)</span><a class="headerlink" href="#separate_modalities.get_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary with patient IDs as keys and modality directories as entries corresponding to them.
+For parallel dictionairies creation. Input is T2_directories.txt or DWI_direc, or masks_corrected</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="separate_modalities.mask_list">
+<code class="descclassname">separate_modalities.</code><code class="descname">mask_list</code><span class="sig-paren">(</span><em>working_directory</em>, <em>mask_root_directory</em>, <em>status_file_name</em>, <em>file_name_ending</em><span class="sig-paren">)</span><a class="headerlink" href="#separate_modalities.mask_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;Create text files with patient IDs and the corresponding directories of masks or ROIs.
+It can generally be used to map any file referring to this patient and is stored withn
+the patient subdirectory under the mask root directory.
+:param string working_directory:
+:param string mask_root_directory:
+:param string status_file_name: name of the minor map text file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="separate_modalities.process_files">
+<code class="descclassname">separate_modalities.</code><code class="descname">process_files</code><span class="sig-paren">(</span><em>working_directory</em>, <em>data_root_directory</em>, <em>mask_root_directory</em>, <em>mask_format_name</em><span class="sig-paren">)</span><a class="headerlink" href="#separate_modalities.process_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entire dataset mapping and preprocessing, which includes mapping the dataset, retrieving modality
+and mask directories. Then check for which of all candidate patient IDs all necessary data is present.
+Necessary data includes in current version:
+* axial T2 image
+* prostate or peripheral zone segmentation image
+* Regions of interest image
+Finally only keep patients for which all this information is present.
+For these patients, create within the working directory a subdirectory named after the patient ID in which
+all these information are copied and feature files are going to be stored.
+:param string working_directory: At this point working directory can be completely empty
+:param string data_root_directory:
+:param string mask_root_directory: It is the directory under which all patient ID subderectories are present.
+Those must contain an itk image referring to the prostate or peripheral zone segmentation, an itk image
+referring to ROIs and a <em>MeVisLab</em> dicom/tif image corresponding to the axial T2 image of the patient,
+after which masks are extracted. This is necessary to retrieve patient ID and spacing information.
+:param string mask_format_name: indicates if whole prostate segmentations or peripheral zone segmentations shall be used.
+Can be <em>no_previous_mask_init.nii</em> for the entire prostate or <em>pz_mask.nii</em> for the peripheral zone.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="separate_modalities.retrieve_modalities">
+<code class="descclassname">separate_modalities.</code><code class="descname">retrieve_modalities</code><span class="sig-paren">(</span><em>modality_name</em>, <em>working_directory</em>, <em>reset=False</em><span class="sig-paren">)</span><a class="headerlink" href="#separate_modalities.retrieve_modalities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and save files in the working directory, that are minor maps to a raw dataset.
+Theses files are generated by map <em>all_modalities.txt</em> and like the format of <em>all_modalities.txt</em>, contain in lines
+the patient ID followed by lines that refer to the sequence description, pixel spacing
+and file full path (dicom directory).They are readable by humans. Then the next patient ID follows and so on. The difference is that
+they only refer to files that correspond to a specific sequence description. This description is retrieved by <em>all_modalities.txt</em>
+by a regular expression matching, so that they match the pattern of a specific sequence (e.g. T2 or DWI). In case a new dataset
+is introduced, where sequence descriptions differ, regex matches can be editted in a single point in the code, which is in
+global_functions.regex_match</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>modality_name</strong> (<em>string</em>) &#8211; can be only T2 or DWI.</li>
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>reset</strong> (<em>bool</em>) &#8211; If the file already exists, delete it and make a new map. Default is False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="estimating-features">
+<h1>Estimating features<a class="headerlink" href="#estimating-features" title="Permalink to this headline">¶</a></h1>
+<p>The following modules are used to extract prostate radiomic features mentioned in literature. Whenever a method described in a paper is used, this is ceited either in the docstring of the function, or in inline comments in the source code. Five major modules are meant to caclulate the features. Each one of them has a structure, in which, a major function named as the module itself (e.g. <em>C1.C1</em>, <em>C2.C2</em> etc) is called. This function then calls other functions implemented in each module and returns a dictionary with all the features that it has calculated. All these modules are contained within the directory <em>src/features</em>, a subdirectory of the main source code directory.</p>
+<p>The following holds for these modules:</p>
+<ul class="simple">
+<li>C1 calculates first order statistics.</li>
+<li>C2 calculates second order statistics.</li>
+<li>C3 is for gradient features.</li>
+<li>C4 is for wavelet features. Note that extraction of features for multiple scales after laplacian pyramidal decomposition is implemented in <em>main1</em>.</li>
+<li>C5 is to calculate fractal features.</li>
+</ul>
+<p>C2 and C5 features can be calculate either by the sliding window or by the ROI based approach.</p>
+<div class="section" id="roi-based-approach">
+<h2>ROI based approach<a class="headerlink" href="#roi-based-approach" title="Permalink to this headline">¶</a></h2>
+<p>ROIs over which to calculate the features were defined by the ground truth. As <em>mahotas</em> library (or any library available) does not cover the case of support regions of arbitrary shape, the method to apply this was to consider a circumscribed rectangle around each ROI marked as positive. As a slice might contain multiple ROIs, the remaining healthy space was then partitioned in a set of rectangles. The boundaries of those were defined by the boundaries of the rectangles corresponding to positive ROIs extended until the end of the image and the boundaries of the image itself. This can be formulated as follows:</p>
+<p>If N contours described by a parameter <img class="math" src="_images/math/d94de7ced7a45a6cc905f157357ebd6bbbf13407.png" alt="t_i(x_i,y_i), i\in[1,N]"/> respectively lie within a rectangle bounded by <img class="math" src="_images/math/5d92a0586f1292a137ec968225ddf47d7c81f686.png" alt="x \in [x^0,x^1]"/> and <img class="math" src="_images/math/88ddb7a36844e92952f10eaaf4bee39a07c77642.png" alt="y \in [y^0, y^1]"/>, then for each <img class="math" src="_images/math/5f7aa3931d3df05833bbfd2768e3bcbf6b6eb522.png" alt="x_i, y_i"/> holds <img class="math" src="_images/math/cf02ed0af0168f81785f326f7af70d2a7e244771.png" alt="x_i \in [x_i^0, x_i^1]"/> and <img class="math" src="_images/math/f149b9a650f9e8c2d9c748f3c55a8eaa144bcc7c.png" alt="y_i \in [y_i^0, y_i^1]"/>, where <img class="math" src="_images/math/83cfd799628109ee256f8ba1645132e81e769f1b.png" alt="x_i^0, x_i^1 \in [x^0,x^1]"/> and <img class="math" src="_images/math/80a8ec64b9e491a39c5caf322918363350ea8cdd.png" alt="y_i^0, y_i^1 \in [y^0, y^1]"/>. Then the ROIs over which the features are calculated are defined by the intersections of the lines defined by</p>
+<div class="math">
+<p><img src="_images/math/aab141a57e26f34902ed264a1b3dd3d7442e5c61.png" alt="x=x^0, x_1^0, \ldots, x^1
+
+y=y^0, y_1^0, \ldots, y^1"/></p>
+</div><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">For C2, implemented mostly by <em>mahotas</em> library, feature values were found to have a dependence on the region size (the smaller the region the smaller the value).</p>
+</div>
+</div>
+<div class="section" id="sliding-window">
+<h2>Sliding window<a class="headerlink" href="#sliding-window" title="Permalink to this headline">¶</a></h2>
+<p>9x9 pixels sliding window is a more secure alternative.</p>
+</div>
+<div class="section" id="module-C1">
+<span id="c1-features"></span><h2>C1 features<a class="headerlink" href="#module-C1" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="C1.C1">
+<code class="descclassname">C1.</code><code class="descname">C1</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#C1.C1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns first order features. See C1.window_statistics for more</p>
+<p><em>ws</em> is an important parameter (window size) and it is defined within the function source code.
+It refers to a window which is <em>wsxws</em> pixels. Preset value is 9x9.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">documentation of <em>C1.window_statistics</em></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> (<em>np.array</em>) &#8211; the image about which features are calculated</li>
+<li><strong>intensity_levels</strong> (<em>int</em>) &#8211; represents the dataset global maximum of intensity levels</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary with all features</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="C1.window_statistics">
+<code class="descclassname">C1.</code><code class="descname">window_statistics</code><span class="sig-paren">(</span><em>window</em>, <em>intensity_levels</em><span class="sig-paren">)</span><a class="headerlink" href="#C1.window_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates first order statistical radiomic features.</p>
+<p>Features are described in detail in literature review. These include first four order moments,
+and some special features, the reference of which can be find in the block comments in the code.
+All features are calclulated for a neighborhood of size <em>ws x ws</em> around each pixel.
+Parameter ws is defined in function <em>C1.C1</em> source code which in turn calls C1.window_statistics via <em>global_functions.pixelwise_features</em>
+giving as input the window, rather than the entire image. Then this function is called for a window
+of size ws x ws for each pixel in the image and for this window (referring to a single pixel) all features
+are returned in form of a dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>window</strong> (<em>np.array</em>) &#8211; window on which features are calculated</li>
+<li><strong>intensity_levels</strong> (<em>int</em>) &#8211; represents the dataset global maximum of intensity levels</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary with first order statistics, shape of the image containing 1x4 lists</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-C2">
+<span id="c2-features"></span><h2>C2 features<a class="headerlink" href="#module-C2" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="C2.C2">
+<code class="descclassname">C2.</code><code class="descname">C2</code><span class="sig-paren">(</span><em>img</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="headerlink" href="#C2.C2" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns 2nd order statistics as described in literature review.
+GLRLM and GLCM are calculated over a 5 grey level image to avoid sparse matrices.
+LBP and LDDP are calculated over a 256 grey level image.
+14th Haralick feature is not calculated as mahotas implementation used here is buggy and
+for a sliding window excecution hangs at arbitrary points.
+However, for ROI based aproach, it seems to be working.
+Still, it is not considered safe to use it.</p>
+<p>For references see:</p>
+<p>M. M. Galloway, “Texture analysis using gray level run lengths,” Com-
+puter graphics and image processing, vol. 4, no. 2, pp. 172–179, 1975.</p>
+<p>R. M. Haralick, K. Shanmugam, et al., “Textural features for image clas-
+sification,” IEEE Transactions on systems, man, and cybernetics, no. 6,
+pp. 610–621, 1973.</p>
+<p>Note that for the last reference, all 28 features are calculated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>img</strong> (<em>np.array</em>) &#8211; image for which the second order statistical features presented in the above papers are extracted</li>
+<li><strong>return_array</strong> (<em>bool</em>) &#8211; if True, an array with all features for the specified pixel is returned. This is used to describe</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>the feature vector referring to the specific pixel in a sliding window aproach. Therefore, it should be only set in
+sliding window aproach, otherwise an exception should be expected. Default is False (in accordance with default values
+of the main function).
+:returns: dictionary or numpy array with features</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="C2.GLRLM">
+<code class="descclassname">C2.</code><code class="descname">GLRLM</code><span class="sig-paren">(</span><em>img</em>, <em>intensity_levles</em><span class="sig-paren">)</span><a class="headerlink" href="#C2.GLRLM" title="Permalink to this definition">¶</a></dt>
+<dd><p>calls <em>chainGLRLM</em> for rotated versions of input image and returns dictionary with GLRLM features</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="C2.GLRLM_features">
+<code class="descclassname">C2.</code><code class="descname">GLRLM_features</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#C2.GLRLM_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 5 Grey Level Run Length Features as described in M. Galloway paper</p>
+<p>M. M. Galloway, “Texture analysis using gray level run lengths,” Com-
+puter graphics and image processing, vol. 4, no. 2, pp. 172–179, 1975.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p</strong> (<em>list</em>) &#8211; p is the matrix containing gray level run lengths (2D)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list containing all 5 features</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="C2.chainGLRLM">
+<code class="descclassname">C2.</code><code class="descname">chainGLRLM</code><span class="sig-paren">(</span><em>img</em>, <em>intensity_levels</em>, <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#C2.chainGLRLM" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns normalized grey level run length matrix for already rotated image.</p>
+<p>An image (img input parameter) is given as input. The image has to already be rotated.
+A rotated image looks like this: if the original image is an np.array with shape (512, 512),
+a rotated image at 45 degrees will have 1,2,..., 1024, 1023,...,2,1 row elements.
+This means that the pixels are given as row elements for each diagonal line.
+Then all subsequent occurences of all gray level are counted for each row and returned as the GLRLMat.
+For more information see:</p>
+<p>M. M. Galloway, “Texture analysis using gray level run lengths,” Com-
+puter graphics and image processing, vol. 4, no. 2, pp. 172–179, 1975.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> (<em>np.array</em>) &#8211; Rotated image for which the consecutive occurences of all gray levels are caluclated</li>
+<li><strong>intensity_levels</strong> (<em>int</em>) &#8211; the number of intensity levels present in an image</li>
+<li><strong>width</strong> (<em>int</em>) &#8211; the width of the image in pixels</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns list:</th><td class="field-body"><p class="first last">2 x 2 list containing countings of consecutive occurences of all gray levels</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="C2.lddp">
+<code class="descclassname">C2.</code><code class="descname">lddp</code><span class="sig-paren">(</span><em>image</em>, <em>radius1</em>, <em>radius2</em>, <em>points</em>, <em>ignore_zeros=False</em>, <em>preserve_shape=True</em><span class="sig-paren">)</span><a class="headerlink" href="#C2.lddp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom implementation of 2nd order local directional derivative pattern
+Originally obtained from mahotas.features.lbp_transform function.</p>
+<p>An inner and an outer radius with respect to a point, which is each image pixel are selected.
+Then, a set of points are obtained by interpolation on these radii, according to the number defined by <em>points</em>
+argument. Note that if, for example, 8 points are given, there are 8 points that are considered on the inner radius
+defined by equal angles starting from the central point and each one of them. If these two points (the origin, or the
+centre) and each point define a straight line, also 8 points on the same lines are considered for the outer radius.</p>
+<p>For reference see :</p>
+<p>Guo, Zhenhua, et al. &#8220;Local directional derivative pattern for rotation invariant texture classification.&#8221;
+Neural Computing and Applications 21.8 (2012): 1893-1904.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> (<em>np.array</em>) &#8211; numpy array input image</li>
+<li><strong>radius1</strong> (<em>int</em>) &#8211; inner radius (in pixels)</li>
+<li><strong>radius2</strong> (<em>int</em>) &#8211; outer radius (in pixels)</li>
+<li><strong>points</strong> (<em>int</em>) &#8211; number of points to consider. It should be given regarding the inner radius, as the second set of points will be aligned to the ones lying in the inner circle</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">lddp histogram</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-C3">
+<span id="c3-features"></span><h2>C3 features<a class="headerlink" href="#module-C3" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="C3.C3">
+<code class="descclassname">C3.</code><code class="descname">C3</code><span class="sig-paren">(</span><em>img</em>, <em>resolution</em><span class="sig-paren">)</span><a class="headerlink" href="#C3.C3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all gradient features</p>
+<p>All the gradient features include the following:</p>
+<ul class="simple">
+<li>Kirsch gradients</li>
+<li>Roberts gradients</li>
+<li>Sobel filter</li>
+<li>Unoriented gradients</li>
+<li>local binary patterns</li>
+<li>local directional derivative patterns</li>
+<li>Gabor filter coefficients</li>
+<li>Gaussian blurred images</li>
+</ul>
+<p>Note that for the Gabor and Gaussian filters, scales range between 2 and 8 mm as to capture scales within
+which there could be a lesion. This method is mentioned in:</p>
+<p>G. Litjens, O. Debats, J. Barentsz, N. Karssemeijer, and H. Huisman,
+“Computer-aided detection of prostate cancer in mri,” IEEE transactions
+on medical imaging, vol. 33, no. 5, pp. 1083–1092, 2014.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> (<em>np.array</em>) &#8211; the image about which features are calculated</li>
+<li><strong>resolution</strong> (<em>float</em>) &#8211; represents the physical dimension to which a pixel corresponds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary with all gradient features.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="C3.li">
+<code class="descclassname">C3.</code><code class="descname">li</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#C3.li" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of the Li filter</p>
+<p>Filter is described in detail in:</p>
+<p>Q. Li, S. Sone, and K. Doi, “Selective enhancement filters for nodules,
+vessels, and airway walls in two-and three-dimensional ct scans,” Medical
+physics, vol. 30, no. 8, pp. 2040–2051, 2003.</p>
+<p>Roughly, it is a dot and line sensitive filter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>img</strong> (<em>np.array</em>) &#8211; image on which the filter is applied</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list containing two numpy arrays. The first is the filter that refers to dots, while the second refers to lines. Each of these has the shape of the image (a value for each pixel)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-C4">
+<span id="c4-features"></span><h2>C4 features<a class="headerlink" href="#module-C4" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="C4.C4">
+<code class="descclassname">C4.</code><code class="descname">C4</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#C4.C4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns Daubechies and Haar wavelet coefficients</p>
+<p>Daubeschies wavelet coefficients are averaged on a 7 x 7 window as mentioned in:</p>
+<p>R. Lopes, A. Ayache, N. Makni, P. Puech, A. Villers, S. Mordon, and
+N. Betrouni, “Prostate cancer characterization on mr images using fractal
+features,” Medical physics, vol. 38, no. 1, pp. 83–95, 2011.</p>
+<p>Depending on the input image, the maximum level of scale decomposition might vary.
+This depends on pywavelet library that is used to extract the coefficients.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="C4.pad_to_shape">
+<code class="descclassname">C4.</code><code class="descname">pad_to_shape</code><span class="sig-paren">(</span><em>coeffs</em>, <em>original_shape</em><span class="sig-paren">)</span><a class="headerlink" href="#C4.pad_to_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;pad with zeors to get the original slice shape for each scale. return_arry[0,0] and [0,1] are the original dims</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-C5">
+<span id="c5-features"></span><h2>C5 features<a class="headerlink" href="#module-C5" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="C5.C5">
+<code class="descclassname">C5.</code><code class="descname">C5</code><span class="sig-paren">(</span><em>img</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="headerlink" href="#C5.C5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns fractal dimension features.</p>
+<p>The algorithms that have been deployed to extract fractal features is the popular 3D box counting.
+In the following reference:</p>
+<p>R. Lopes, A. Ayache, N. Makni, P. Puech, A. Villers, S. Mordon, and
+N. Betrouni, “Prostate cancer characterization on mr images using fractal
+features,” Medical physics, vol. 38, no. 1, pp. 83–95, 2011.</p>
+<p>It is recommended that 8-tap Daubechie wavelet coefficients could be used to estimate the fractal dimension (FD)
+but this method has not been implemented. 3D box counting is presented in:</p>
+<p>B. Stark, M. Adams, D. Hathaway, and M. Hagyard, “Evaluation of two
+fractal methods for magnetogram image analysis,” Solar Physics, vol. 174,
+no. 1-2, pp. 297–309, 1997.</p>
+<p>Fractal dimmensions are estimated for the image itself given as input <em>img</em> and the histogram of the same image,
+a method recommended in</p>
+<p>D. Lv, X. Guo, X. Wang, J. Zhang, and J. Fang, “Computerized charac-
+terization of prostate cancer by fractal analysis in mr images,” Journal of
+magnetic resonance imaging, vol. 30, no. 1, pp. 161–168, 2009.</p>
+<p>Implementation of the algorithm has been properly adapted from an implementation by Francesco Turci,
+retrieved online from <a class="reference external" href="https://francescoturci.wordpress.com/2016/03/31/box-counting-in-numpy/">https://francescoturci.wordpress.com/2016/03/31/box-counting-in-numpy/</a> on 10 Feb 2017.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>img</strong> (<em>np.array</em>) &#8211; Image the fractal dimension of which is estimated. Also, image histogramm&#8217;s FD is estimated.</li>
+<li><strong>intensity_levels</strong> (<em>int</em>) &#8211; represents the dataset global maximum of intensity levels</li>
+<li><strong>return_array</strong> (<em>bool</em>) &#8211; if True, an array with all features for the specified pixel is returned. This is used to describe</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>the feature vector referring to the specific pixel in a sliding window aproach. Therefore, it should be only set in
+sliding window aproach, otherwise an exception should be expected. Default is False (in accordance with default values
+of the main function).
+:returns: dictionary with image and histogram FDs or numpy array in sliding window mode</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="classification">
+<h1>Classification<a class="headerlink" href="#classification" title="Permalink to this headline">¶</a></h1>
+<p>In the current version, an automated <em>main</em> function is implemented for the module <em>classification</em>. This calls recursively excecution instructions for all possible scenaria for the experiments that were run, having hardcoded the corresponding directories. This should be editted during any external application.</p>
+<span class="target" id="module-load_npy"></span><dl class="function">
+<dt id="load_npy.get_feature_names">
+<code class="descclassname">load_npy.</code><code class="descname">get_feature_names</code><span class="sig-paren">(</span><em>patient_directory</em><span class="sig-paren">)</span><a class="headerlink" href="#load_npy.get_feature_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all features names in a list with the corresponding order that they are saved in the vectors of the .npy
+feature file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>patient_directory</strong> (<em>string</em>) &#8211; Where feature name files are saved.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list: all feature names in the correct order.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="load_npy.get_features_subset">
+<code class="descclassname">load_npy.</code><code class="descname">get_features_subset</code><span class="sig-paren">(</span><em>patient_directory</em>, <em>feature_file</em>, <em>feature_names</em><span class="sig-paren">)</span><a class="headerlink" href="#load_npy.get_features_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a subset of all features for an image as a 4d numpy array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>patient_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>feature_file</strong> (<em>string</em>) &#8211; </li>
+<li><strong>feature_names</strong> (<em>list</em>) &#8211; Features that should be retrieved</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">4d numpy array: Requested features of the specific image for the volume of interest.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="load_npy.load_file">
+<code class="descclassname">load_npy.</code><code class="descname">load_file</code><span class="sig-paren">(</span><em>patient_directory</em>, <em>feature_file</em>, <em>feature_name</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="headerlink" href="#load_npy.load_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a single feature from a feature file and either return it for further processing or save it as itk image
+for visualization. Visualization shows the true feature values for the volume of interest over which the feature has
+been calculated and sets the rest of the image to zero, so there is a common world matrix with T2 image and masks
+and comparison is made possible. However, those zero values do not correspond to actual feature values. Moreover,
+during classification or processing, no feature values outside the mask are taken into account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>patient_directory</strong> &#8211; </li>
+<li><strong>feature_file</strong> &#8211; </li>
+<li><strong>feature_name</strong> &#8211; </li>
+<li><strong>return_array</strong> &#8211; If set to True, array is returned for further processing, otherwise an itk image file is saved
+for visualizing the specific feature. Default value is False.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns 3d numpy array:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">a feature value (only if return_array is set to True)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-classification"></span><dl class="function">
+<dt id="classification.RF_trees_number_optimization">
+<code class="descclassname">classification.</code><code class="descname">RF_trees_number_optimization</code><span class="sig-paren">(</span><em>working_directory</em>, <em>keep_features</em>, <em>no_xval=5</em>, <em>case_name='undefined_'</em>, <em>multi_dir=False</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.RF_trees_number_optimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>call classify RF recursively for several numbers of trees of the random forest</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.case_split">
+<code class="descclassname">classification.</code><code class="descname">case_split</code><span class="sig-paren">(</span><em>input_string</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.case_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>used to be main, but with change of cluster can be submitted as a single job</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.classify_RF">
+<code class="descclassname">classification.</code><code class="descname">classify_RF</code><span class="sig-paren">(</span><em>working_directory</em>, <em>keep_features</em>, <em>no_xval=5</em>, <em>no_trees=60</em>, <em>case_name='undefined_'</em>, <em>multi_dir=False</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classify_RF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train and evaluate a random forest model with cross validation. Save the results of each
+cross validation fold in a text file within the working directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>keep_features</strong> (<em>string</em>) &#8211; full path to a text file containing all features (in lines) that should be loaded</li>
+<li><strong>file_name</strong> (<em>string</em>) &#8211; name of the file where the results are saved</li>
+<li><strong>no_xval</strong> (<em>int</em>) &#8211; number of cross validation folds. Default is 5.</li>
+<li><strong>no_trees</strong> (<em>int</em>) &#8211; number of trees of the random forest. Default is 60.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of cross validation folds accuracies</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.classify_RF_independent">
+<code class="descclassname">classification.</code><code class="descname">classify_RF_independent</code><span class="sig-paren">(</span><em>training_directory</em>, <em>test_directory</em>, <em>keep_features</em>, <em>no_trees=70</em>, <em>case_name='undefined_'</em>, <em>multi_dir=False</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classify_RF_independent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train a Random Forest model and evaluate on an independent dataset.  Save the resulting accuracy in a text
+file within the working directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>training_directory</strong> (<em>string/list</em>) &#8211; root directory or directories of the training set</li>
+<li><strong>test_directory</strong> (<em>string</em>) &#8211; root directory of the test set</li>
+<li><strong>keep_features</strong> (<em>string</em>) &#8211; full path to a text file containing all features (in lines) that should be loaded</li>
+<li><strong>case_name</strong> (<em>string</em>) &#8211; name of the file where the results are saved. It is not the full name, as the file will</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>always end with _independent_test_RF.txt. This is the initial part of the file name, that should be indicative
+of the case (e.g. <a href="#id5"><span class="problematic" id="id6">peripheral_zone_all_features_</span></a>).
+:param int no_trees: Number of trees used by the random forest. Default is 70.
+:param bool multi_dir: Must be true if training_directory is a list of directories. This means that data under multiple
+roots can be used as a training set and a model on multi-clinic data can be trained. Default is False.
+:return: classification accuracy</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.classify_svm">
+<code class="descclassname">classification.</code><code class="descname">classify_svm</code><span class="sig-paren">(</span><em>working_directory</em>, <em>keep_features</em>, <em>no_xval=5</em>, <em>no_features=15</em>, <em>case_name='undefined'</em>, <em>multi_dir=False</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classify_svm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale the data with RobustScaler (see documentation of sklearn.preprocessing.RobustScaler) as SVM is sensitive to the data scales.
+Then apply PCA on the new dataset. Train and evaluate a svm model with cross validation. Save the results of each
+cross validation fold in a text file within the working directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>keep_features</strong> (<em>string</em>) &#8211; full path to a text file containing all features (in lines) that should be loaded</li>
+<li><strong>file_name</strong> (<em>string</em>) &#8211; name of the file where the results are saved</li>
+<li><strong>no_xval</strong> (<em>int</em>) &#8211; number of cross validation folds. Default is 5.</li>
+<li><strong>no_features</strong> (<em>int</em>) &#8211; number of features that are kept during PCA. Default is 15. (Usually many more features are present).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of cross validation folds accuracies</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.classify_svm_independent">
+<code class="descclassname">classification.</code><code class="descname">classify_svm_independent</code><span class="sig-paren">(</span><em>training_directory</em>, <em>test_directory</em>, <em>keep_features</em>, <em>no_features=15</em>, <em>case_name='undefined'</em>, <em>multi_dir=False</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classify_svm_independent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train a SVM model and evaluate on an independent dataset.</p>
+<p>Scale the data with RobustScaler (see documentation of sklearn.preprocessing.RobustScaler) as SVM is sensitive to the data scales.
+Then apply PCA on the new dataset. Train and evaluate a svm model. Save the resulting accuracy in a text file within the
+working directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>training_directory</strong> (<em>string/list</em>) &#8211; root directory or directories of the training set</li>
+<li><strong>test_directory</strong> (<em>string</em>) &#8211; root directory of the test set</li>
+<li><strong>keep_features</strong> (<em>string</em>) &#8211; full path to a text file containing all features (in lines) that should be loaded</li>
+<li><strong>case_name</strong> (<em>string</em>) &#8211; name of the file where the results are saved. It is not the full name, as the file will</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>always end with _PCA_independent_svm.txt. This is the initial part of the file name, that should be indicative
+of the case (e.g. <a href="#id7"><span class="problematic" id="id8">peripheral_zone_all_features_</span></a>).
+:param bool multi_dir: Must be true if training_directory is a list of directories. This means that data under multiple
+roots can be used as a training set and a model on multi-clinic data can be trained. Default is False.
+:param int no_features: number of features that are kept during PCA. Default is 15. (Usually many more features are present).
+:return: classification accuracy</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.discriminate_dataset">
+<code class="descclassname">classification.</code><code class="descname">discriminate_dataset</code><span class="sig-paren">(</span><em>working_directory</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.discriminate_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list with all full paths for all the files that shall be processed within a working directory.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.get_all_features">
+<code class="descclassname">classification.</code><code class="descname">get_all_features</code><span class="sig-paren">(</span><em>working_directory</em>, <em>features_switch</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.get_all_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a keep features text file inside the working directory. This contains in each line a feature name
+that should be loaded. This file is based on only one patient directory within the working directory.
+Therefore, it is assumed that the same features have been calculated for all patients, otherwise an exception will
+be raised when trying to load features that have not been calculated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>features_switch</strong> (<em>list</em>) &#8211; Which of the features to retrieve (from families C1, C2, C3, C4, C5).It is important to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>feed the features switch in order (eg never give f3, f5,f1 but f1, f3, f5)
+:returns: string which is full path to keep features text file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.load_data">
+<code class="descclassname">classification.</code><code class="descname">load_data</code><span class="sig-paren">(</span><em>working_directory</em>, <em>feature_file</em>, <em>keep_features</em>, <em>exclude_circumscribed=True</em>, <em>class_balance=True</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and return as numpy array the selected calculated features from the specified feature file. If no positive labels
+are found in an image this is possibly due to registration errors and nothing is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>feature_file</strong> (<em>string</em>) &#8211; full path to feature file</li>
+<li><strong>keep_features</strong> (<em>string</em>) &#8211; full path to a text file containing all features (in lines) that should be loaded</li>
+<li><strong>exclude_circumscribed</strong> (<em>bool</em>) &#8211; If set to True, pixels where circumscribed ROIs do not correspond to actual label</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>values are disregarded. This only has an effect to ROI based calculation of C2 and C5 features. Default value is True.
+:param class_balance: If set to True, majority class random undersampling is performed and a balanced dataset is returned.
+Default value is True.
+:returns: numpy array with feature vectors for all the pixels
+:returns: numpy array with the labels corresponding to the vectors in the first returned array</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.load_dataset">
+<code class="descclassname">classification.</code><code class="descname">load_dataset</code><span class="sig-paren">(</span><em>working_directory</em>, <em>keep_features</em>, <em>multi_case=False</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.load_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Returns dataset with all selected features for all feature files within a working directory. (The entire dataset,</dt>
+<dd>where data points refer to vectors that correspond to pixels for evey image.)</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>keep_features</strong> (<em>string</em>) &#8211; full path to a text file containing all features (in lines) that should be loaded</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.multi_directory_data">
+<code class="descclassname">classification.</code><code class="descname">multi_directory_data</code><span class="sig-paren">(</span><em>dir_list</em>, <em>keep_features</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.multi_directory_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and return data as an array of vectors and the corresponding labels from multiple directory roots.
+These arrays and labels can be pipelined to any sklearn model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dir_list</strong> (<em>list</em>) &#8211; list of full root directories of datasets (the corresponding working directories,</td>
+</tr>
+</tbody>
+</table>
+<p>where all feature files are saved. Not the actual raw dataset directories.)
+:param string keep_features: full path to a text file containing all features (in lines) that should be loaded
+:returns: numpy array with feature vectors for all the pixels of all feature files under dir_list entries
+:returns: numpy array with the labels corresponding to the vectors in the above array</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="classification.reduction_analysis">
+<code class="descclassname">classification.</code><code class="descname">reduction_analysis</code><span class="sig-paren">(</span><em>working_directory, case_name='undefined', features_switch=['f1', 'f2', 'f3', 'f4', 'f5'], multi_dir=False</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.reduction_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform PCA analysis and save the eigenvalues in descending order in text files. This analysis is done both on
+the original data and on data that has been scaled with an outlier robust scaler, which selects values within the
+25 and 75th percentile of all values. (see documentation of sklearn.preprocessing.RobustScaler)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>file_name</strong> (<em>string</em>) &#8211; name of the output text file</li>
+<li><strong>features_switch</strong> (<em>list</em>) &#8211; Which of the features to retrieve (from families C1, C2, C3, C4, C5).It is important to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>feed the features switch in order (eg never give f3, f5,f1 but f1, f3, f5). Default value is [&#8216;f1&#8217;, &#8216;f2&#8217;, &#8216;f3&#8217;, &#8216;f4&#8217;, &#8216;f5&#8217;].</p>
+</dd></dl>
+
+</div>
+<div class="section" id="further-functionalities">
+<h1>Further functionalities<a class="headerlink" href="#further-functionalities" title="Permalink to this headline">¶</a></h1>
+<p>Some further functionalities have been developped. <em>global_functions</em> module is essential for all other modules, carrying out some vital tasks needed globally. Other modules ( <em>change_to_nifti</em> and <em>registration</em> ) just automate some preprocessing steps but their presence is optional during automated routines. However, <em>registration.dicom_series_to_nii</em> is still essential and should allways be present.</p>
+<span class="target" id="module-global_functions"></span><dl class="function">
+<dt id="global_functions.ROI_based_calclulations">
+<code class="descclassname">global_functions.</code><code class="descname">ROI_based_calclulations</code><span class="sig-paren">(</span><em>img</em>, <em>ROIs</em>, <em>the_function</em><span class="sig-paren">)</span><a class="headerlink" href="#global_functions.ROI_based_calclulations" title="Permalink to this definition">¶</a></dt>
+<dd><p>For ROI based calculation of C2 and C5 features. Apply the function defined as input to regions
+defined by the circumscribed rectangles around regions of interest defined at ROIs. ROIs is a numpy array
+representing the mask where 0 refers to healthy tissue and 1 to lesions. There can multiple lesions of
+arbitrary shape. Also a 4-connected 1-pixel binary errosion
+and dilation is applied on ROIs to compensate for registration errors of the ROIs masks, that usually are
+the outputs of a registation and salt and pepper noise is frequently observed.
+Lesions with a total area less than 10 pixels are disregarded as they are probably a result of registration errors that
+are not compensated during erosion-dilation.
+:param 2d numpy array img:
+:param 2d numpy array ROIs:
+:param function object the_function:
+:returns: features dictionary, where keys are features&#8217; names and entries are 2d numpy arrays with the feature values
+over each pixel.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="global_functions.custom_pixelwise_features">
+<code class="descclassname">global_functions.</code><code class="descname">custom_pixelwise_features</code><span class="sig-paren">(</span><em>img</em>, <em>ws</em>, <em>function</em>, <em>*extra_args</em><span class="sig-paren">)</span><a class="headerlink" href="#global_functions.custom_pixelwise_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns features for the windows within the image calculated by function.</p>
+<p>It is a common issue that many features have to be calculated for each pixel within the image,
+with respect to a neighborhood of pixels, referred to as window. Window has a size <em>ws x ws</em>.
+<em>pixelwise_features</em> calls iteratively a function that calculates all these features.
+Function <em>function</em> can have in this version arbitrarilly many arguments given as
+the input specified by <em>extra_args</em>. <em>pixelwise_features</em> calls then this function for every
+window within the image. This means, that , for example, two directly subsequent windows only differ in one value.</p>
+<p>The important thing about <em>pixelwise_features</em> is that it takes in account boundary conditions.
+For a pixel that lies close to the boundary and a window of size <em>ws x ws</em> would yield an index error,
+is truncated to a window just fitting in the image. For example, the window of a pixel at <em>img[1,0]</em>
+for <em>ws = 9</em>, would be <em>img[0:5, 0:4]</em>.</p>
+<p>It is used for sliding window estimation of C2 and C5 features. Otherwise, <em>pixelwise_features</em> which calls an implementation
+from <em>ndimage</em> library, which is way more efficient is used.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> (<em>np.array</em>) &#8211; image for which the features are calculated</li>
+<li><strong>ws</strong> (<em>int</em>) &#8211; window size</li>
+<li><strong>function</strong> (<em>function.object</em>) &#8211; function that calculates the features. It only takes one input, namely window (e.g. img[0:5, 0:4]</li>
+<li><strong>*extra_args</strong> (<em>any</em>) &#8211; <p>Any further set of parameters that function <em>function</em> could take as input</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary where keys are features names and entries are 2d arrays with feature values over the image.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="global_functions.healthy_rois">
+<code class="descclassname">global_functions.</code><code class="descname">healthy_rois</code><span class="sig-paren">(</span><em>img</em>, <em>roi_inds</em>, <em>ROIs</em>, <em>a_function</em><span class="sig-paren">)</span><a class="headerlink" href="#global_functions.healthy_rois" title="Permalink to this definition">¶</a></dt>
+<dd><p>For ROI based calculation of C2 and C5 features. Apply the function defined as input to regions
+defined by the dual of circumscribed rectangles around regions of interest defined at ROIs.
+Healthy ROIs are defined by the intersections of lines defining the boundaries of circumscribed rectangles
+around regions defined by ROIs, thus they are compact and recangularly shaped.
+:param 2d numpy array img:
+:param list roi_inds: indices of lines defining the boundaries of circumscribed rectangles
+around regions defined by ROIs
+:param 2d numpy array ROIs:
+:param function object a_function: function to apply on healthy regions
+:returns: features dictionary, where keys are features&#8217; names and entries are 2d numpy arrays with the feature values
+over each pixel.
+:returns: A list with coordinates of the healthy ROI circumscribed rectangle is also returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="global_functions.pixelwise_features">
+<code class="descclassname">global_functions.</code><code class="descname">pixelwise_features</code><span class="sig-paren">(</span><em>img</em>, <em>ws</em>, <em>function</em>, <em>*extra_args</em><span class="sig-paren">)</span><a class="headerlink" href="#global_functions.pixelwise_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sliding window feature estimation by using <em>ndimage.filters.generic_filter</em>, which is much
+faster than the custom implementation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> (<em>np.array</em>) &#8211; image for which the features are calculated</li>
+<li><strong>ws</strong> (<em>int</em>) &#8211; window size</li>
+<li><strong>function</strong> (<em>function.object</em>) &#8211; function that calculates the features. It only takes one input, namely window (e.g. img[0:5, 0:4]</li>
+<li><strong>*extra_args</strong> (<em>any</em>) &#8211; <p>Any further set of parameters that function <em>function</em> could take as input</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">2d numpy array with feature values over the image.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="global_functions.regex_match">
+<code class="descclassname">global_functions.</code><code class="descname">regex_match</code><span class="sig-paren">(</span><em>necessity</em>, <em>string_to_match</em><span class="sig-paren">)</span><a class="headerlink" href="#global_functions.regex_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;Gathering all regex matches used throughout the code to make it applicable to other datasets by modifying.
+Therefore, if we have to train on a new dataset where sequence description is in a new format, only this
+function has to be editted and all regex matches used to make the dataset mapping will be up to date. Generally
+regex are extensivelly used to navigate through map files and identify if something is a directory, etc. In short,
+it is used to find what is what.
+..note:: Downside is that this script will have to be imported to other scripts under module directory.</p>
+<blockquote>
+<div>This makes it impossible to import any script from modules directory to <em>global_functions</em> script,
+otherwise mutual import will happen and an exception will be raised.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>necessity</strong> (<em>string</em>) &#8211; can be <em>patient image</em>, <em>patient image</em>, <em>axial T2</em>, <em>axial DWI</em>, <em>windows or unix directory</em></td>
+</tr>
+</tbody>
+</table>
+<p>It indicates what we are looking for, which means that we are questioning if a string is a directory or an image etc.
+:param string_to_match:
+:returns: Bool, True if the string is what we are looking for, false otherwise.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="global_functions.set_in_range">
+<code class="descclassname">global_functions.</code><code class="descname">set_in_range</code><span class="sig-paren">(</span><em>img</em>, <em>indices</em>, <em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#global_functions.set_in_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crop an array to the boundaries specified by indices and fill it with specified values. New image shape
+and values must have the same shape.
+:param 2d numpy array img:
+:param numpy array indices:
+:param 2d numpy array values:
+:returns: 2d numpy array with new shape and values</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="global_functions.single_values_to_img">
+<code class="descclassname">global_functions.</code><code class="descname">single_values_to_img</code><span class="sig-paren">(</span><em>dictionary</em>, <em>img_shape</em><span class="sig-paren">)</span><a class="headerlink" href="#global_functions.single_values_to_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;For ROI based features, replicate img.shape times the single value over the entire ROI</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="global_functions.trim_array_to_ROI">
+<code class="descclassname">global_functions.</code><code class="descname">trim_array_to_ROI</code><span class="sig-paren">(</span><em>img</em>, <em>return_support_region=False</em><span class="sig-paren">)</span><a class="headerlink" href="#global_functions.trim_array_to_ROI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crop an image to the boundaries specified by the circumscribed rectangle of the region defined by a mask.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>numpy masked array img</strong> (<em>2d</em>) &#8211; mask is the region of interest.</li>
+<li><strong>return_support_region</strong> (<em>bool</em>) &#8211; If set to true, also the boudaries of the circumscribed rectangle are returned.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Default is False.
+:returns: 2d numpy array, cropped image
+:returns: If <em>return_support_region</em> is set, also a list with coordinates of the ROI circumscribed rectangle is returned.</p>
+</dd></dl>
+
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><em>global_functions</em> module should <strong>never</strong> import any other module from a relative path.</p>
+</div>
+<span class="target" id="module-change_to_nifti"></span><dl class="function">
+<dt id="change_to_nifti.change_an_image">
+<code class="descclassname">change_to_nifti.</code><code class="descname">change_an_image</code><span class="sig-paren">(</span><em>img_file</em><span class="sig-paren">)</span><a class="headerlink" href="#change_to_nifti.change_an_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change an image from mhd or mha itk format to nii itk format. This is mostly for legacy, as in previous efforts
+mhds were used.
+:param string img_file: full path to the file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="change_to_nifti.find_mhds">
+<code class="descclassname">change_to_nifti.</code><code class="descname">find_mhds</code><span class="sig-paren">(</span><em>root_directory</em>, <em>change_to_nifti=True</em><span class="sig-paren">)</span><a class="headerlink" href="#change_to_nifti.find_mhds" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;change all .mhd or .mha images under a root directory to .nii</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="change_to_nifti.resize_nifti">
+<code class="descclassname">change_to_nifti.</code><code class="descname">resize_nifti</code><span class="sig-paren">(</span><em>img_file</em><span class="sig-paren">)</span><a class="headerlink" href="#change_to_nifti.resize_nifti" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;It is a common case that image files when transferred from DICOM format use a 64 bit float format in itk images.
+This function sets unsigned 8 bit integer format for mask or roi files and int 32 for other images, resulting in an
+important file size reduction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>img_file</strong> (<em>string</em>) &#8211; full path to the file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="change_to_nifti.set_masks_world">
+<code class="descclassname">change_to_nifti.</code><code class="descname">set_masks_world</code><span class="sig-paren">(</span><em>root_directory</em><span class="sig-paren">)</span><a class="headerlink" href="#change_to_nifti.set_masks_world" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;Each patient folder has 3 nii files, one for masks, one for ROIs and the axial T2. In the working directory,
+each of these is set to the same values according to the mask, which is set according to the T2 DICOM.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>root_directory</strong> (<em>string</em>) &#8211; </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-registration"></span><dl class="function">
+<dt id="registration.dcm_series_to_nii">
+<code class="descclassname">registration.</code><code class="descname">dcm_series_to_nii</code><span class="sig-paren">(</span><em>dump_directory</em>, <em>working_directory</em>, <em>overwrite=False</em><span class="sig-paren">)</span><a class="headerlink" href="#registration.dcm_series_to_nii" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Reads dicom files from dump directory and writes single nii file</dt>
+<dd>in working directory for feeding in elastix. Also creates the patient directory within the working directory.
+..note:: if a file is already there it is overwritten</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dump_directory</strong> (<em>string</em>) &#8211; directory of the dicom files</li>
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; </li>
+<li><strong>overwrite</strong> (<em>bool</em>) &#8211; If set to True, patient folder is removed and a new one is created. Default is False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="registration.patient_identifier">
+<code class="descclassname">registration.</code><code class="descname">patient_identifier</code><span class="sig-paren">(</span><em>mask_root_directory</em>, <em>all_modalities_file</em>, <em>patient_no</em><span class="sig-paren">)</span><a class="headerlink" href="#registration.patient_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obsolete, shall not be used</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="registration.recursive_patient_registration">
+<code class="descclassname">registration.</code><code class="descname">recursive_patient_registration</code><span class="sig-paren">(</span><em>msk_root</em><span class="sig-paren">)</span><a class="headerlink" href="#registration.recursive_patient_registration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obsolete, shall not be used</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="registration.roi_registration">
+<code class="descclassname">registration.</code><code class="descname">roi_registration</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="headerlink" href="#registration.roi_registration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fine tuned call of <em>Simple Elastix</em> to apply a 3D BSpline registration on the ROIs.
+In order to call it, a build of <em>SimpleITK</em> that includes <em>Simple Elastix</em> must be present.
+Registered file and transform are saved in the patient subdirectory within the mask root directory.
+It takes as input a single argument, which is a directory. This must contain the fixed and moving
+images, that must be named as <em>no_previous_mask_init.nii</em> and <em>macro_mask_init.nii</em> and both
+come from manual preprocessing. If for any reason the file is not proper for processing, a <em>note.txt</em>
+file mentioning the reason for this insufficiency shall also reside within the directory.
+In that case, where a <em>note.txt</em> file is also present, no registration is attempted.
+:param string directory:</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="main1.html" class="btn btn-neutral float-right" title="Feature extraction routine" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral" title="Manifesto" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, P Chatzoudis.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

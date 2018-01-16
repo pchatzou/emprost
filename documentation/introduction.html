@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Manifesto &mdash; emPROST 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="emPROST 0.1 documentation" href="index.html"/>
+        <link rel="next" title="Navigating the dataset" href="estimating_features.html"/>
+        <link rel="prev" title="Welcome to emPROST’s documentation!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> emPROST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Manifesto</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-of-emprost">Purpose of emPROST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#read-before-you-go-how-to-use-it">Read before you go-how to use it</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#preprocessing">Preprocessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculate-features">Calculate features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess-and-classify">Preprocess and classify</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#future-versions">Future Versions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="estimating_features.html">Navigating the dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating_features.html#estimating-features">Estimating features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating_features.html#classification">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating_features.html#further-functionalities">Further functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main1.html">Feature extraction routine</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">emPROST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Manifesto</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/introduction.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="manifesto">
+<h1>Manifesto<a class="headerlink" href="#manifesto" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="purpose-of-emprost">
+<h2>Purpose of emPROST<a class="headerlink" href="#purpose-of-emprost" title="Permalink to this headline">¶</a></h2>
+<p><em>emPROST</em> software is being developed to extract and finally compare radiomic features from prostate-MRI images. Radiomic features are a popular way to diagnose cancer or even classify tumor aggressivness and several such features have been suggested and applied in several CAD attempts reported in literature.</p>
+<p><em>emPROST</em> software caclulates most of these features and saves them to files (.npy files) that represent 4D arrays, where the first 3 dimensions correspond to MRI-image dimensions and the fourth refers to the 198 feature space corresponding to each pixel in the image.</p>
+<p>Subsets of these features can subsequently be retrieved and used for processing.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This software has been used and tested only for T2 axial MRI images of the prostate. Moreover, no gold standard for feature values This means that some values are obtained as features, but it is not reliable to estimate the accuracy according to which these values represent the actual feature values. The best way to test would be to get a refference image and compare, but such a testing object is not available.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Many parameters are hardcoded within the source code and thus failsafe, but if made available to a user interface, controls about these parameters should be implemented (for example parameter <em>ws</em> which stands for window size in should be a positive odd integer).</p>
+</div>
+</div>
+<div class="section" id="read-before-you-go-how-to-use-it">
+<h2>Read before you go-how to use it<a class="headerlink" href="#read-before-you-go-how-to-use-it" title="Permalink to this headline">¶</a></h2>
+<p><em>emPROST</em> implements all necessary preprocessing steps, such as figuring out which images to use, under which directory they are stored, the corresponding mask files etc. However, a sequence of actions is needed:</p>
+<ol class="arabic simple">
+<li>Manual preprocessing for segmentations and ground truth extraction.</li>
+<li>Feature calculation.</li>
+<li>Data processing (classification experiments).</li>
+</ol>
+<div class="section" id="preprocessing">
+<h3>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">¶</a></h3>
+<p>Manual preprocessing requires prostate and ROI segmentations to be provided, where, in the mask images, 1 corresponds to prostatic volume or a lesion and 0 to non-prostatic volume or healthy tissue respectively. Optionally a segmentation image of the peripheral zone can be provided, in case that features just for the peripheral zone are required. These files must be saved in a folder that contains the dicom image that they have been extracted from. This is necessary for making the correct correspondence to the files in the dataset according to the dicom header <em>patient ID</em> attribute. The root directory of all these folders will be referred to as the <strong>mask root directory</strong>. Summarizing, mask root directory must contain N subfolders, referring to N patients respectively, each one of which contains:</p>
+<ul class="simple">
+<li>A dicom (or <em>MeVisLab</em> dicom/tif format) file, to which segmentations correspond.</li>
+<li><em>no_previous_mask_init.nii</em> file that corresponds to the prostate segmenation.</li>
+<li><em>pz_mask.nii</em> (optionally) that corresponds to segmentation of the peripheral zone.</li>
+<li><em>rois_mask_.nii</em> file that corresponds to the annotated lesions.</li>
+</ul>
+<p>A reliable and free software to do segmentations is <em>itk-snap</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A <em>note.txt</em> file might be also present. In that case, this patient is automatically disregarded. This file should contain notes for the reason that this patient is not taken into account.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All file names (in <em>italics</em>) must be precisely as shown in italics.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Any ROIs or ROI parts that fall outside the prostate or peripheral zone segmentation are disregarded.</p>
+</div>
+</div>
+<div class="section" id="calculate-features">
+<h3>Calculate features<a class="headerlink" href="#calculate-features" title="Permalink to this headline">¶</a></h3>
+<p>After the mask root directory is manually created, feature calculation and storage routine can be invoked. This is automatic, given the necessary inputs. Inputs are</p>
+<p>-Data root directory, which is the root directory of our dataset.
+-Mask root directory, described above.
+-Working directory. This can be empty for the moment, but it will be filled as features are calculated. It will finally contain several text files that contain information about what is stored where and several folders, each one of which will contain the original MRI image, the .npy file containing the features for the same image, text files that contain features&#8217; names, image segmentations and ROI masks. Text files containing the directories of files (images and masks corresponding to patients) are first created. Then the folders are created, named after the corresponding patient ID.
+-Optionally selection of features that are to be estimated, whether to use the entire prostate segmentation or just the peripheral zone and whethern to use sliding window or circumscribed rectangle ROI estimation approach for C2 and C5 feature sets can be additional inputs.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A status file called <em>processed_cases.txt</em> is saved also within the working directory. In that case, patients can be processed in batches, as if the program stops, feature extraction will continue from the patient that was last processed. If this file is editted or deleted, it will start over.</p>
+</div>
+</div>
+<div class="section" id="preprocess-and-classify">
+<h3>Preprocess and classify<a class="headerlink" href="#preprocess-and-classify" title="Permalink to this headline">¶</a></h3>
+<p>This is also automatic. The user can choose between SVM and Random Forest classifiers. In case of SVM where preprocessing is needed, it is done within the routine. Results (in terms of accuracy of a randomly subsampled subset of the dataset) are saved in text files within the working directory. Results text files&#8217; are defined by the user and should reflect the experiment that they refer to. Extracted accuracies refer to pixel classification, thus for example a 60 % accuracy would mean that 60 % of all pixels in all images are classified correctly.</p>
+</div>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Python version is 2.7.13. The following list of libraries should be included:</p>
+<p>-mahotas</p>
+<p>-pydicom</p>
+<p>-imblearn</p>
+<p>-scipy</p>
+<p>-numpy</p>
+<p>-skimage</p>
+<p>-SimpleITK (preferably including <em>Simple Elastix</em>, but not necessary)</p>
+<p>-re (usually already present in most <em>python</em> installations)</p>
+</div>
+<div class="section" id="future-versions">
+<h2>Future Versions<a class="headerlink" href="#future-versions" title="Permalink to this headline">¶</a></h2>
+<p>It is recommended that for future implementations, a custom ROI-size independent arbitray support region C2 feature evaluation routine is developped (in the current version, <em>mahotas</em> implementations are deployed, that do not support these attributes).</p>
+<p>Moreover, a speedup with multithreading during feature evaluation is a good idea.</p>
+<p>Finally, as feature files are basically bitmaps with feature values, this format could be optimized as follows:
+- Use compression
+- Save original image, features and segmentations within the same file, so that they don&#8217;t have to be saved in subdirectories within the working directory. This would also make visualization of features easier. A potential way to achieve this is itk vector image, which is unfortunatelly not supported in <em>SimpleITK</em>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="estimating_features.html" class="btn btn-neutral float-right" title="Navigating the dataset" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to emPROST’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, P Chatzoudis.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

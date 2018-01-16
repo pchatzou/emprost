@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Feature extraction routine &mdash; emPROST 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="emPROST 0.1 documentation" href="index.html"/>
+        <link rel="prev" title="Navigating the dataset" href="estimating_features.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> emPROST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Manifesto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating_features.html">Navigating the dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating_features.html#estimating-features">Estimating features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating_features.html#classification">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating_features.html#further-functionalities">Further functionalities</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Feature extraction routine</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">emPROST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Feature extraction routine</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/main1.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-main1">
+<span id="feature-extraction-routine"></span><h1>Feature extraction routine<a class="headerlink" href="#module-main1" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="main1.apply_np_mask">
+<code class="descclassname">main1.</code><code class="descname">apply_np_mask</code><span class="sig-paren">(</span><em>image</em>, <em>mask</em><span class="sig-paren">)</span><a class="headerlink" href="#main1.apply_np_mask" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Apply a mask on an image. Before this function is called, it is adviseable to call change_to_nifti.set_masks_world</dt>
+<dd>as it is possible that some mask files and MRI image files have different world masks and this will raise an exception.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>image file image</strong> (<em>itk</em>) &#8211; MRI itk image file</li>
+<li><strong>image file mask</strong> (<em>itk</em>) &#8211; mask itk image file on the specific MRI image file (which means that if MRI image is a DWI</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>and the mask is extracted on a T2 image it will raise an exception.)
+:returns: circumscribed rectangular volume of interest on which features will be calculated. As the prostate is a
+small proportion of the entire image and feature calculation is computationally expensive, this speeds up excecution
+a lot.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="main1.calculate_features">
+<code class="descclassname">main1.</code><code class="descname">calculate_features</code><span class="sig-paren">(</span><em>img, rois, patient_directory, resolution, features_switch=['f1', 'f2', 'f3', 'f4', 'f5'], sliding_window=False</em><span class="sig-paren">)</span><a class="headerlink" href="#main1.calculate_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates features for an image slice. All functions that implement the selected feature calculation in the selected way
+are called depending on the inputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>numpy array img</strong> (<em>2d</em>) &#8211; Image slice</li>
+<li><strong>numpy array rois</strong> (<em>2d</em>) &#8211; Regions of interest on the image slice labeled 0 for healthy and 1 for lesion</li>
+<li><strong>patient_directory</strong> &#8211; Where to save feature names description files</li>
+<li><strong>resolution</strong> &#8211; Image pixel physical spacing (retrieved from the MRI image header information, not avilable in numpy)</li>
+<li><strong>features_switch</strong> (<em>list</em>) &#8211; Which of the features to calculate (from families C1, C2, C3, C4, C5). Default value is</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>[&#8216;f1&#8217;, &#8216;f2&#8217;, &#8216;f3&#8217;, &#8216;f4&#8217;, &#8216;f5&#8217;], which calculates all features.
+:param bool sliding_window: If true, C2 and C5 features are calculated according to the 9x9 sliding window approach,</p>
+<blockquote>
+<div>otherwise by the circumscribed rectangle aproach. Default is False.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">numpy array: 3d numpy array with vectors containing the feature values at each pixel.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main1.dictionaries_to_arrays">
+<code class="descclassname">main1.</code><code class="descname">dictionaries_to_arrays</code><span class="sig-paren">(</span><em>features_dictionary</em>, <em>patient_directory</em>, <em>feature_set</em><span class="sig-paren">)</span><a class="headerlink" href="#main1.dictionaries_to_arrays" title="Permalink to this definition">¶</a></dt>
+<dd><p>Due to change in design, had to convert all features that are reurned in dictionairies as
+multi dimensinal np arrays. for exapmple, a 512x 512 slice with 10 C1 featues is now a 512x512x10 array
+dictionary entries are writen in text files which will indicate feature values sequence.
+According to these files, features can be retireived later. Each patient folder contains the files that correspond
+to the calculated features for the specific patient.</p>
+<p>Feature name files also contain a dummy feature which is zero everywhere. This is for initialization and it does not
+correspond to an actual feature.
+:param: dictionary features_dictionary: keys are features names and entries are 2d numpy arrays that contain the value of the specified
+feature for each pixel in the image.
+:param: string patient_directory: directory where feature name files are saved.
+:param: string feature_set: the set of features (C1, C2, etc) It defines the name of the feature name files as
+features_names_C1.txt etc
+:returns: numpy array: 3d numpy array with vectors containing the feature values at each pixel.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="main1.dump_patient_folders">
+<code class="descclassname">main1.</code><code class="descname">dump_patient_folders</code><span class="sig-paren">(</span><em>working_directory</em>, <em>features_switch</em>, <em>sliding_window</em><span class="sig-paren">)</span><a class="headerlink" href="#main1.dump_patient_folders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Walk all over the working directory, find files for which features should be calculated and calculate
+the selected features for them according to the specified method (sliding window or ROI based.) Moreover,
+a progress file is saved in the working directory. This contains all images about which features have already been calculated.
+Therefore, if an exception is raised or excecution is halted for any reason, it can reset. It is also possible to
+expand in more modalities, as progress file&#8217;s images names&#8217; depend on the modality and the patient ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>working_directory</strong> (<em>string</em>) &#8211; Where all patient directories containing images, masks and ROIs are saved.</li>
+<li><strong>features_switch</strong> (<em>list</em>) &#8211; Which of the features to calculate (from families C1, C2, C3, C4, C5). Default value is</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>[&#8216;f1&#8217;, &#8216;f2&#8217;, &#8216;f3&#8217;, &#8216;f4&#8217;, &#8216;f5&#8217;], which calculates all features.
+:param bool sliding_window: If true, C2 and C5 features are calculated according to the 9x9 sliding window approach,</p>
+<blockquote>
+<div>otherwise by the circumscribed rectangle aproach. Default is False.</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="main1.main2">
+<code class="descclassname">main1.</code><code class="descname">main2</code><span class="sig-paren">(</span><em>working_directory, data_root, mask_root, features_switch=['f1', 'f2', 'f3', 'f4', 'f5'], whole_prostate=True, sliding_window=False</em><span class="sig-paren">)</span><a class="headerlink" href="#main1.main2" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;Call all dataset preprocessing routines, namely separate_modalities.process_files, change_to_nifti.set_masks_world
+and then call dump_patient_folders to calculate all features for all files. Also select whether the whole prostate in feature
+estimation is used or just the peripheral zone.
+:param string working_directory: Where all patient directories containing images, masks and ROIs are saved.
+:param string data_root: root directory of the raw dataset
+:param string mask_root: root directory of the mask and roi files
+:param list features_switch: Which of the features to calculate (from families C1, C2, C3, C4, C5). Default value is
+[&#8216;f1&#8217;, &#8216;f2&#8217;, &#8216;f3&#8217;, &#8216;f4&#8217;, &#8216;f5&#8217;], which calculates all features. It is important to feed the features switch in order</p>
+<blockquote>
+<div>(eg never give f3, f5,f1 but f1, f3, f5)</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>whole_prostate</strong> (<em>bool</em>) &#8211; Whether to use the entire prostate or simply the peripheral zone. Default is True (whole prostate).</li>
+<li><strong>sliding_window</strong> (<em>bool</em>) &#8211; If true, C2 and C5 features are calculated according to the 9x9 sliding window approach,
+otherwise by the circumscribed rectangle aproach. Default is False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="main1.rescale">
+<code class="descclassname">main1.</code><code class="descname">rescale</code><span class="sig-paren">(</span><em>img</em>, <em>ratio</em><span class="sig-paren">)</span><a class="headerlink" href="#main1.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modified wavelet pyramid scheme to bring an image down to a specific scale.
+Applies a 2*ratio pixel kernel Gaussian filter to the image to smooth and avoid aliasing.
+Then input image is sampled on a grid defined by ratio. If ratio is not integer and image pixel indices are
+:math: <cite>i in [0,N_x]</cite> and :math: <cite>j in [0, N_y]</cite> respectively,then a sampling point is i*ratio[0].
+The index according to which its value is retrieved is floor(i*ratio(0)), since the value is constant in the pixel.
+It is better to use scipy.ndimage.interpolate.zoom function but this implementation is necessary to
+run the program.</p>
+<p>3d images and 3d ratio as input
+:param: 3d numpy array img
+:param: list ratio: ratio[0] corresponds to x sampling ratio, ratio[1] to y sampling ratio and ratio[2]
+to z. Since this function is made to subsample MRI images, ratio[0]==ratio[1]
+:returns: 3d numpy array: downsampled image</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="main1.write_features_to_files">
+<code class="descclassname">main1.</code><code class="descname">write_features_to_files</code><span class="sig-paren">(</span><em>patient_directory</em>, <em>image_name</em>, <em>rois</em>, <em>mask</em>, <em>features_switch</em>, <em>sliding_window</em><span class="sig-paren">)</span><a class="headerlink" href="#main1.write_features_to_files" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Calls calculate_features for each slice trimmed within the volume of interest (thus eliminating pixels both</dt>
+<dd>in z and in x,y directions) and saves a file with the features calculated within the patient directory. The
+file is in .npy format and it is a 4d numpy array. Features can retrieved by the feature name description files
+that are saved in the same directory.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>patient_directory</strong> (<em>string</em>) &#8211; where to save the feature files</li>
+<li><strong>image_name</strong> &#8211; MRI image on which features are calculated. This name is used to name after the feature file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Thus, if extended to multiparametric MRI, there can be several feature files in the same directory corresponding
+to different modality images, as image name is after the sequence description and the patient ID.
+:param itk image file rois: itk image file for ROIs on the specific MRI image file (which means that if MRI image is a DWI
+and the mask is extracted on a T2 image it will raise an exception.) 1 refers to a lesion and 0 refers to healthy.
+:param itk image file mask: itk image file for masks on the specific MRI image file (which means that if MRI image is a DWI
+and the mask is extracted on a T2 image it will raise an exception.) 1 refers to the prostate or
+peripheral zone of the prostate volume and 0 refers to healthy.
+:param list features_switch: Which of the features to calculate (from families C1, C2, C3, C4, C5). Default value is
+[&#8216;f1&#8217;, &#8216;f2&#8217;, &#8216;f3&#8217;, &#8216;f4&#8217;, &#8216;f5&#8217;], which calculates all features.
+:param  bool sliding_window: If true, C2 and C5 features are calculated according to the 9x9 sliding window approach,</p>
+<blockquote>
+<div>otherwise by the circumscribed rectangle aproach. Default is False.</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="estimating_features.html" class="btn btn-neutral" title="Navigating the dataset" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, P Chatzoudis.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
